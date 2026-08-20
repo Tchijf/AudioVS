@@ -1,0 +1,48 @@
+name: Build Windows Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --no-progress -y
+
+      - name: Build setup and portable package
+        shell: cmd
+        run: build_release_windows.bat
+
+      - name: Verify release outputs
+        shell: powershell
+        run: |
+          if (-not (Test-Path 'release/AudioVisualizerStudio_Setup.exe')) { throw 'Setup fehlt' }
+          if (-not (Test-Path 'release/AudioVisualizerStudio_Portable.zip')) { throw 'Portable ZIP fehlt' }
+          Get-FileHash 'release/AudioVisualizerStudio_Setup.exe' -Algorithm SHA256
+          Get-FileHash 'release/AudioVisualizerStudio_Portable.zip' -Algorithm SHA256
+
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: AudioVisualizerStudio-Windows-2.1
+          path: |
+            release/AudioVisualizerStudio_Setup.exe
+            release/AudioVisualizerStudio_Portable.zip
+          if-no-files-found: error
