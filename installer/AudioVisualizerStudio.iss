@@ -2,7 +2,9 @@
 #define MyAppVersion "2.1.0"
 #define MyAppPublisher "C△D"
 #define MyAppExeName "AudioVisualizerStudio.exe"
-#define MyAppId "{B1D87FC2-69A1-4C2F-9EF6-61305EA8B38F}"
+#define MyAppGuid "B1D87FC2-69A1-4C2F-9EF6-61305EA8B38F"
+#define MyAppId "{{" + MyAppGuid + "}"
+#define MyUninstallKey "{" + MyAppGuid + "}_is1"
 
 [Setup]
 AppId={#MyAppId}
@@ -75,7 +77,7 @@ var
 
 function UninstallKey(): String;
 begin
-  Result := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{#MyAppId}_is1';
+  Result := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\{#MyUninstallKey}';
 end;
 
 function ReadPreviousValue(const ValueName: String; var Value: String): Boolean;
