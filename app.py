@@ -160,7 +160,6 @@ class VisualizerApp(tk.Tk):
         self.bind_all("<Control-y>", self.redo)
         self.bind_all("<Control-Z>", self.undo)
         self.bind_all("<Control-Y>", self.redo)
-        self.after(450, self._ensure_ffmpeg_if_missing)
         self.after(700, self._offer_autosave_recovery)
         self._schedule_autosave()
         self.protocol("WM_DELETE_WINDOW", self._on_close)
@@ -2138,3 +2137,4 @@ class VisualizerApp(tk.Tk):
 if __name__ == "__main__":
     app = VisualizerApp()
     app.mainloop()
+
