@@ -79,6 +79,19 @@ def resource_dir() -> Path:
     return Path(base) if base else Path(__file__).resolve().parent
 
 
+def _copy_preset_asset(source_path: str, assets_dir: Path, preset_name: str, kind: str) -> str:
+    """Copy artwork to an immutable content-addressed preset asset path."""
+    source = Path(source_path).resolve()
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()[:16]
+    suffix = source.suffix.lower() or ".png"
+    safe_name = re.sub(r"[^A-Za-z0-9_-]+", "_", preset_name).strip("_") or "preset"
+    safe_kind = "logo" if kind == "logo" else "cover"
+    copied = assets_dir / f"{safe_name}_{safe_kind}_{digest}{suffix}"
+    if not copied.is_file():
+        shutil.copy2(source, copied)
+    return str(copied)
+
+
 class VisualizerApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -1181,16 +1194,11 @@ class VisualizerApp(tk.Tk):
     def _preset_design_state(self) -> dict:
         """Return reusable design/layout values for a preset.
 
-        Track-specific content such as the selected video, cover file, artist name
-        and title text is intentionally not stored. Their styling and exact
-        positions are stored, however, so a preset can be reused on another song.
+        The selected video remains session-specific. Visual content, including
+        artist and title text, is stored so loading a preset restores the complete
+        design shown when it was saved.
         """
-        state = self._snapshot_state()
-        excluded = {
-            "artist",
-            "title",
-        }
-        return {key: value for key, value in state.items() if key not in excluded}
+        return self._snapshot_state()
 
     def save_preset(self):
         presets = self._read_presets()
@@ -1234,10 +1242,7 @@ class VisualizerApp(tk.Tk):
             resolved = self._resolve_asset_path(raw_path, kind, allow_last=False)
             if not resolved:
                 return raw_path.strip()
-            suffix = Path(resolved).suffix.lower() or ".png"
-            copied = assets_dir / f"{safe_name}_{kind}{suffix}"
-            shutil.copy2(resolved, copied)
-            return str(copied)
+            return _copy_preset_asset(resolved, assets_dir, safe_name, kind)
 
         logo_path_for_preset = self.logo_var.get().strip()
         cover_path_for_preset = self.cover_var.get().strip()
@@ -1259,7 +1264,7 @@ class VisualizerApp(tk.Tk):
         design_state["cover_path"] = cover_path_for_preset
 
         presets[name] = {
-            "schema_version": 3,
+            "schema_version": 4,
             "design_state": design_state,
             # Keep the older sections for backward compatibility and for clean-up
             # of copied preset logo assets.
