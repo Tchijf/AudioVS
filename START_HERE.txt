@@ -1,0 +1,18 @@
+AUDIO VISUALIZER STUDIO 2.1 – RELEASE-PROJEKT
+==============================================
+
+Für Endnutzer werden nur diese beiden Dateien verteilt:
+
+1. AudioVisualizerStudio_Setup.exe
+   Normale Windows-Installation unter Program Files.
+
+2. AudioVisualizerStudio_Portable.zip
+   Portable Ausgabe ohne Installation.
+
+Beide Dateien entstehen auf einem Windows-Build-PC durch:
+
+  build_release_windows.bat
+
+Die fertige Anwendung enthält Python und die Video-Engine bereits intern.
+Auf dem Endnutzer-PC gibt es deshalb keinen start_windows.bat-, Python- oder
+FFmpeg-Installationsschritt und keinen notwendigen Internet-Download.

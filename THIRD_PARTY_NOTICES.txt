@@ -1,0 +1,41 @@
+THIRD-PARTY-HINWEISE – AUDIO VISUALIZER STUDIO 2.1
+===================================================
+
+1. Python
+---------
+Audio Visualizer Studio wird für Windows als selbstständige Anwendung mit einer
+gebündelten CPython-Laufzeit ausgeliefert.
+Projekt: https://www.python.org/
+Lizenz: Python Software Foundation License
+
+2. Pillow
+---------
+Bildverarbeitung innerhalb der Anwendung verwendet Pillow.
+Projekt: https://python-pillow.org/
+Lizenz: HPND License
+
+3. FFmpeg
+---------
+Audio Visualizer Studio enthält für Windows eine fest gebündelte FFmpeg-
+Video-Engine. Sie wird während des Release-Builds vorbereitet und in die
+Anwendungs-EXE eingebettet. Endnutzer müssen FFmpeg weder installieren noch
+herunterladen.
+
+Projekt: https://ffmpeg.org/
+Windows-Build-Quelle des Release-Builders:
+https://www.gyan.dev/ffmpeg/builds/
+
+Die Lizenzbedingungen hängen von der verwendeten FFmpeg-Build-Variante und den
+enthaltenen Bibliotheken ab. Die jeweiligen FFmpeg-/GPL-/LGPL-Hinweise gelten
+unabhängig von Audio Visualizer Studio.
+
+FFmpeg Lizenzinformationen:
+https://ffmpeg.org/legal.html
+
+FFmpeg Quellcode:
+https://ffmpeg.org/download.html
+
+Der Release-Builder verwendet standardmäßig den Gyan Essentials Windows Build.
+Vor einer kommerziellen Weitergabe sollte die tatsächlich gebündelte Build-
+Variante samt Lizenzinformationen für die jeweilige Release-Datei dokumentiert
+werden.
